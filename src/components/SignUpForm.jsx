@@ -1,8 +1,14 @@
 const SignUpForm = ({closeModal}) => {
+    const handleSignUp = async (e) => {
+        e.preventDefault();
+        // todo: post to create user server route
+        closeModal();
+    }
+
     return (
         <section>
             <h2>Nowy użytkownik</h2>
-            <form id="new_account_form">
+            <form id="new_account_form" onSubmit={handleSignUp}>
                 <label htmlFor="input_username">Nazwa użytkownika</label>
                 <input type="text" id="input_username" name="username"/>
                 <label htmlFor="input_email">Adres e-mail:</label>

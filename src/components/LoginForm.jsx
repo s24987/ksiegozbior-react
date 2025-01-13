@@ -6,7 +6,7 @@ const LoginForm = ({closeModal, logIn}) => {
     const [error, setError] = useState("");
 
     const handleSubmit = async (e) => {
-        e.preventDefault(); // Zablokowanie domyślnego przesłania formularza
+        e.preventDefault();
 
         try {
             const response = await fetch("http://localhost:8080/login", {
