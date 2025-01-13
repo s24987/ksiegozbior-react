@@ -1,0 +1,51 @@
+#search_results section {
+    display: flex;
+    align-items: start;
+}
+
+#search_results section img {
+    max-width: 80px;
+    height: auto;
+    width: auto;
+    object-fit: contain;
+}
+
+#search_results section div {
+    margin: 0 10px;
+}
+
+#search_results section button {
+    margin-left: auto;
+    margin-right: 0;
+}
+
+#search_results h2 {
+    margin: 0 0 5px 0;
+}
+
+#search_results h2 a:link {
+    color: #4c8b77;
+    text-decoration: none;
+}
+
+#search_results h2 a:visited {
+    color: #4c8b77;
+}
+
+#search_results h2 a:hover {
+    color: #7bc7a4;
+}
+
+#search_results h4 {
+    font-weight: lighter;
+    margin: 0 0 10px 0;
+    color: dimgrey;
+}
+
+#search_results p {
+    margin: 5px 0;
+}
+
+button.delete {
+    margin: 0;
+}
