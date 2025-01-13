@@ -7,9 +7,13 @@ import MainLayout from "./components/MainLayout";
 import Library from "./components/Library";
 import Statistics from "./components/Statistics";
 import Rankings from "./components/Rankings";
+import {useState} from "react";
 
 
 function App() {
+    const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
+    const [isUserAdmin, setIsUserAdmin] = useState(false);
+
     const router = createBrowserRouter(
         createRoutesFromElements([
                 <Route path="/" element={<Root/>}>
