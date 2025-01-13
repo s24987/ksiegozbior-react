@@ -1,7 +1,7 @@
 import '../styles/AccountForm.css';
 import {useState} from "react";
 import LoginForm from "./LoginForm";
-import SignInForm from "./SignInForm";
+import SignUpForm from "./SignUpForm";
 
 const AccountLayout = ({closeModal, logIn}) => {
     const [isLoginView, setIsLoginView] = useState(true);
@@ -15,7 +15,7 @@ const AccountLayout = ({closeModal, logIn}) => {
             {isLoginView ? (
                 <LoginForm closeModal={closeModal} logIn={logIn}/>
             ) : (
-                <SignInForm/>
+                <SignUpForm closeModal={closeModal}/>
             )}
             <div className="toggle-view">
                 {isLoginView ? (

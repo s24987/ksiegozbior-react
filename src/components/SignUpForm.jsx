@@ -1,4 +1,4 @@
-const SignInForm = () => {
+const SignUpForm = ({closeModal}) => {
     return (
         <section>
             <h2>Nowy użytkownik</h2>
@@ -24,4 +24,4 @@ const SignInForm = () => {
     );
 };
 
-export default SignInForm;
+export default SignUpForm;
