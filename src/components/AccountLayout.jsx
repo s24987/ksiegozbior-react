@@ -3,7 +3,7 @@ import {useState} from "react";
 import LoginForm from "./LoginForm";
 import SignInForm from "./SignInForm";
 
-const AccountLayout = ({closeModal}) => {
+const AccountLayout = ({closeModal, logIn}) => {
     const [isLoginView, setIsLoginView] = useState(true);
 
     const toggleView = () => {
@@ -13,7 +13,7 @@ const AccountLayout = ({closeModal}) => {
     return (
         <div className="login-layout">
             {isLoginView ? (
-                <LoginForm/>
+                <LoginForm closeModal={closeModal} logIn={logIn}/>
             ) : (
                 <SignInForm/>
             )}

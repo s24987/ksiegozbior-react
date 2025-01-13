@@ -14,9 +14,17 @@ function App() {
     const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
     const [isUserAdmin, setIsUserAdmin] = useState(false);
 
+    const logIn = () => {
+        setIsUserLoggedIn(true);
+    }
+
+    const logOut = () => {
+        setIsUserLoggedIn(false);
+    }
+
     const router = createBrowserRouter(
         createRoutesFromElements([
-            <Route path="/" element={<Root/>}>
+            <Route path="/" element={<MainLayout isUserLoggedIn={isUserLoggedIn} logIn={logIn} logOut={logOut}/>}>
                 <Route index element={<Home isUserLoggedIn={isUserLoggedIn} isUserAdmin={isUserAdmin}/>}
                        loader={allBooksLoader}/>
                 <Route path={"profile"} element={<Profile/>}/>
@@ -30,12 +38,6 @@ function App() {
     return (
         <RouterProvider router={router}/>
     );
-}
-
-const Root = () => {
-    return (
-        <MainLayout/>
-    )
 }
 
 export default App;

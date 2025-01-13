@@ -3,7 +3,7 @@ import {useState} from "react";
 import Header from "./Header";
 import Footer from "./Footer";
 
-const MainLayout = () => {
+const MainLayout = ({isUserLoggedIn, logIn, logOut}) => {
     let [headerTitle, setHeaderTitle] = useState("Księgozbiór");
     const [isAccountModalOpen, setIsAccountModalOpen] = useState(false);
 
@@ -18,7 +18,7 @@ const MainLayout = () => {
     return (
         <>
             <Header title={headerTitle} isAccountModalOpen={isAccountModalOpen} openAccountModal={openAccountModal}
-                    closeAccountModal={closeAccountModal}/>
+                    closeAccountModal={closeAccountModal} isUserLoggedIn={isUserLoggedIn} logIn={logIn} logOut={logOut}/>
             <nav id="nav_bar">
                 <h3>Menu</h3>
                 <NavLink to="/">Strona główna</NavLink>
