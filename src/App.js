@@ -1,7 +1,7 @@
 import './styles/App.css';
 
 import {createBrowserRouter, createRoutesFromElements, Route, RouterProvider} from 'react-router-dom';
-import Home from "./components/Home";
+import Home, {allBooksLoader} from "./components/Home";
 import Profile from "./components/Profile";
 import MainLayout from "./components/MainLayout";
 import Library from "./components/Library";
@@ -17,7 +17,7 @@ function App() {
     const router = createBrowserRouter(
         createRoutesFromElements([
                 <Route path="/" element={<Root/>}>
-                    <Route index element={<Home/>}/>
+                    <Route index element={<Home isUserLoggedIn={isUserLoggedIn} isUserAdmin={isUserAdmin}/>} loader={allBooksLoader}/>
                     <Route path={"profile"} element={<Profile/>}/>
                     <Route path={"library"} element={<Library/>}/>
                     <Route path={"statistics"} element={<Statistics/>}/>

@@ -1,8 +1,13 @@
-import {useOutletContext} from "react-router-dom";
+import {useLoaderData, useOutletContext} from "react-router-dom";
+import LibraryBook from "./LibraryBook";
+import {useState} from "react";
+import '../styles/Library.css';
 
-const Home = () => {
+const Home = ({isUserLoggedIn, isUserAdmin}) => {
     const [setHeaderTitle] = useOutletContext();
     setHeaderTitle("Księgozbiór");
+    const loadedBooks = useLoaderData();
+    const [books, setBooks] = useState(loadedBooks);
 
     return (
         <>
@@ -19,8 +24,23 @@ const Home = () => {
                     </svg>
                 </button>
             </div>
+            <div id="search_results">
+                {books.map(book => (
+                    <LibraryBook isUserLoggedIn={isUserLoggedIn} isUserAdmin={isUserAdmin} book={book}/>
+                ))}
+            </div>
         </>
     )
+};
+
+export const allBooksLoader = async () => {
+    return fetch('http://localhost:8080/books')
+        .then(response => {
+            const res =response.json();
+            console.log(res);
+            return res;
+        })
+        .catch((error) => console.log(error));
 };
 
 export default Home;
