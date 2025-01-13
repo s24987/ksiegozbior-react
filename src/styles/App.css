@@ -17,12 +17,17 @@ header {
     grid-area: header;
     background-color: darkturquoise;
     background-image: url("../../public/res/turkusowy_kwiat.jpg");
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
 }
 
 header h1 {
-    margin: 10px;
     text-align: center;
     color: white;
+    margin: 0 auto;
+    flex-grow: 1;
 }
 
 

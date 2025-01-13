@@ -5,10 +5,20 @@ import Footer from "./Footer";
 
 const MainLayout = () => {
     let [headerTitle, setHeaderTitle] = useState("Księgozbiór");
+    const [isAccountModalOpen, setIsAccountModalOpen] = useState(false);
+
+    const openAccountModal = () => {
+        setIsAccountModalOpen(true);
+    }
+
+    const closeAccountModal = () => {
+        setIsAccountModalOpen(false);
+    }
 
     return (
         <>
-            <Header title={headerTitle}/>
+            <Header title={headerTitle} isAccountModalOpen={isAccountModalOpen} openAccountModal={openAccountModal}
+                    closeAccountModal={closeAccountModal}/>
             <nav id="nav_bar">
                 <h3>Menu</h3>
                 <NavLink to="/">Strona główna</NavLink>

@@ -1,52 +1,45 @@
-#root {
-    display: grid;
-    grid-template-areas:
-        'header'
-        'content'
-        'footer';
-    gap: 15px;
-    padding: 5px;
-}
-
-#page_body {
+.login-layout {
     min-width: 40%;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
 }
 
-#page_body > section {
+.login-layout > section {
     padding: 10px 30px 10px 30px;
+    background-color: #e2fcfc;
+    border-radius: 10px;
 }
 
-form input, label {
+.login-layout form input, label {
     display: block;
 }
 
-label {
+.login-layout label {
     font-weight: bold;
     color: darkturquoise;
     margin-bottom: 3px;
     margin-top: 8px;
 }
 
-input[type=submit] {
+.login-layout input[type=submit] {
     display: block;
     font-size: medium;
     font-weight: bolder;
     padding: 10px 20px;
     background-color: darkturquoise;
-    color: #e2fcfc;
+    color: white;
     border: none;
     border-radius: 5px;
     margin: 10px auto 0;
 }
 
-input[type=submit].mouse-over {
+.login-layout input[type=submit].mouse-over {
     background-color: #00888a;
 }
 
-input[type=text], input[type=email], input[type=password], input[type=date] {
+.login-layout input[type=text], input[type=email], input[type=password], input[type=date] {
     min-width: 20em;
     border-color: #00888a;
     border-radius: 3px;
@@ -54,20 +47,31 @@ input[type=text], input[type=email], input[type=password], input[type=date] {
     border-width: 1px;
 }
 
-input.error {
+.login-layout input.error {
     border-color: darkred;
 }
 
-#error_summary {
+.login-layout #error_summary {
     width: 20em;
     display: none;
     color: darkred;
     font-size: small;
 }
 
-label.error {
+.login-layout label.error {
     font-size: x-small;
     font-weight: normal;
     color: darkred;
     margin: 3px 0;
+}
+
+.toggle-view > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.toggle-view p {
+    margin-right: 20px;
+    flex-grow: 1;
 }

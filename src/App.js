@@ -8,9 +8,6 @@ import Library from "./components/Library";
 import Statistics from "./components/Statistics";
 import Rankings from "./components/Rankings";
 import {useState} from "react";
-import LoginLayout from "./components/LoginLayout";
-import LoginForm from "./components/LoginForm";
-import SignInForm from "./components/SignInForm";
 
 
 function App() {
@@ -27,10 +24,6 @@ function App() {
                 <Route path={"statistics"} element={<Statistics/>}/>
                 <Route path={"rankings"} element={<Rankings/>}/>
             </Route>,
-            <Route path="/users" element={<LoginLayout/>}>
-                <Route path={"log-in"} element={<LoginForm/>}/>
-                <Route path={"sign-in"} element={<SignInForm/>}/>
-            </Route>
         ])
     );
 
