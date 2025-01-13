@@ -16,15 +16,15 @@ function App() {
 
     const router = createBrowserRouter(
         createRoutesFromElements([
-                <Route path="/" element={<Root/>}>
-                    <Route index element={<Home isUserLoggedIn={isUserLoggedIn} isUserAdmin={isUserAdmin}/>} loader={allBooksLoader}/>
-                    <Route path={"profile"} element={<Profile/>}/>
-                    <Route path={"library"} element={<Library/>}/>
-                    <Route path={"statistics"} element={<Statistics/>}/>
-                    <Route path={"rankings"} element={<Rankings/>}/>
-                </Route>,
-            ]
-        )
+            <Route path="/" element={<Root/>}>
+                <Route index element={<Home isUserLoggedIn={isUserLoggedIn} isUserAdmin={isUserAdmin}/>}
+                       loader={allBooksLoader}/>
+                <Route path={"profile"} element={<Profile/>}/>
+                <Route path={"library"} element={<Library/>}/>
+                <Route path={"statistics"} element={<Statistics/>}/>
+                <Route path={"rankings"} element={<Rankings/>}/>
+            </Route>,
+        ])
     );
 
     return (
