@@ -1,0 +1,73 @@
+#root {
+    display: grid;
+    grid-template-areas:
+        'header'
+        'content'
+        'footer';
+    gap: 15px;
+    padding: 5px;
+}
+
+#page_body {
+    min-width: 40%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#page_body > section {
+    padding: 10px 30px 10px 30px;
+}
+
+form input, label {
+    display: block;
+}
+
+label {
+    font-weight: bold;
+    color: darkturquoise;
+    margin-bottom: 3px;
+    margin-top: 8px;
+}
+
+input[type=submit] {
+    display: block;
+    font-size: medium;
+    font-weight: bolder;
+    padding: 10px 20px;
+    background-color: darkturquoise;
+    color: #e2fcfc;
+    border: none;
+    border-radius: 5px;
+    margin: 10px auto 0;
+}
+
+input[type=submit].mouse-over {
+    background-color: #00888a;
+}
+
+input[type=text], input[type=email], input[type=password], input[type=date] {
+    min-width: 20em;
+    border-color: #00888a;
+    border-radius: 3px;
+    border-style: solid;
+    border-width: 1px;
+}
+
+input.error {
+    border-color: darkred;
+}
+
+#error_summary {
+    width: 20em;
+    display: none;
+    color: darkred;
+    font-size: small;
+}
+
+label.error {
+    font-size: x-small;
+    font-weight: normal;
+    color: darkred;
+    margin: 3px 0;
+}
