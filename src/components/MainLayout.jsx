@@ -10,8 +10,12 @@ const MainLayout = () => {
         <>
             <Header title={headerTitle}/>
             <nav id="nav_bar">
-                <NavLink to="/">Home</NavLink>&nbsp;
+                <h3>Menu</h3>
+                <NavLink to="/">Strona główna</NavLink>
                 <NavLink to="/profile">Profil</NavLink>
+                <NavLink to="/library">Biblioteka</NavLink>
+                <NavLink to="/rankings">Rankingi</NavLink>
+                <NavLink to="/statistics">Statystyki</NavLink>
             </nav>
             <section id="page_body">
                 <Outlet context={[setHeaderTitle]}/>
