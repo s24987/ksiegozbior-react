@@ -1,0 +1,170 @@
+* {
+    font-family: Helvetica, sans-serif;
+}
+
+#root {
+    display: grid;
+    grid-template-areas:
+        'header header header header header header header header header header header header'
+        'nav content content content content content content content content content content content'
+        'footer footer footer footer footer footer footer footer footer footer footer footer';
+    grid-template-rows: auto 1fr auto;
+    gap: 15px;
+    min-height: 98vh;
+}
+
+header {
+    grid-area: header;
+    background-color: darkturquoise;
+    background-image: url("../../public/res/turkusowy_kwiat.jpg");
+}
+
+header h1 {
+    margin: 10px;
+    text-align: center;
+    color: white;
+}
+
+
+nav {
+    grid-area: nav;
+    background-color: #e2fcfc;
+    border-radius: 10px;
+    padding: 10px;
+    color: #2d174a;
+    margin-left: 10px;
+}
+
+nav a:link {
+    color: #2d174a;
+    text-decoration: none;
+}
+
+nav a:visited {
+    color: #2d174a;;
+}
+
+nav a:hover {
+    color: darkturquoise;
+}
+
+footer {
+    grid-area: footer;
+    bottom: 0;
+    align-content: center;
+    margin: 0 auto;
+}
+
+footer p {
+    text-align: center;
+    color: darkgrey;
+    font-size: x-small;
+}
+
+#page_body {
+    grid-area: content;
+    margin-right: 10px;
+}
+
+#page_body section {
+    background-color: #e2fcfc;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+#page_body .middle-section {
+    margin: 15px 0;
+}
+
+#page_body section h2 {
+    margin: 0 0 10px 0;
+}
+
+nav h3 {
+    margin: auto;
+    margin-bottom: 10px;
+}
+
+nav a {
+    display: block;
+    padding: 3px 0;
+}
+
+#statistics td {
+    border: 2px dashed darkturquoise;
+    padding: 5px 15px 5px 5px;
+}
+
+#statistics .number {
+    text-align: right;
+    padding: 5px 5px 5px 15px;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+ol {
+    list-style-type: upper-roman;
+    list-style-position: inside;
+}
+
+
+#search_box {
+    display: flex;
+    align-items: center;
+    border: 2px solid darkturquoise;
+    border-radius: 35px;
+    padding: 5px 15px;
+}
+
+#input_search {
+    flex: 1;
+    font-size: 1.5em;
+    border: none;
+    outline: none;
+}
+
+#btn_search {
+    border: none;
+    background: none;
+    cursor: pointer;
+}
+
+#btn_search svg {
+    width: 2em;
+    height: 2em;
+}
+
+button {
+    margin: 15px 0;
+    font-size: small;
+    font-weight: bolder;
+    padding: 10px 20px;
+    background-color: darkturquoise;
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
+
+button:hover {
+    background-color: #00888a;
+}
+
+button.delete {
+    background-color: #c70707;
+}
+
+button.delete:hover {
+    background-color: darkred;
+}
+
+@media print {
+    * {
+        font-family: Times, serif;
+    }
+
+    nav {
+        display: none;
+    }
+}
