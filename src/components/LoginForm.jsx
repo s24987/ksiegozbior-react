@@ -10,10 +10,11 @@ const LoginForm = ({closeModal, logIn}) => {
 
         try {
             const response = await fetch("http://localhost:8080/login", {
-                method: "POST",
+                method: 'POST',
                 headers: {
-                    "Content-Type": "application/json",
+                    'Content-Type': 'application/json',
                 },
+                credentials: 'include',
                 body: JSON.stringify({ username, password }),
             });
 
