@@ -13,7 +13,7 @@ return (
             <p>Format: {bookFormat}</p>
             <p>Gatunek: {book.genre}</p>
         </div>
-        {isUserLoggedIn && isUserAdmin && <button className="delete">Usuń z biblioteki</button>}
+        {isUserLoggedIn && isUserAdmin && <button className="lib-btn-delete">Usuń z biblioteki</button>}
     </section>
 );
 };
