@@ -1,7 +1,6 @@
 import {useLoaderData, useOutletContext} from "react-router-dom";
 import '../styles/Library.css'
 import LibraryBook from "./LibraryBook";
-import {useState} from "react";
 
 const Library = ({isUserLoggedIn}) => {
     const [setHeaderTitle] = useOutletContext();
