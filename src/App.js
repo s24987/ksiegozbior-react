@@ -4,7 +4,7 @@ import {createBrowserRouter, createRoutesFromElements, Route, RouterProvider} fr
 import Home, {allBooksLoader} from "./components/Home";
 import Profile, {profileLoader} from "./components/Profile";
 import MainLayout from "./components/MainLayout";
-import Library from "./components/Library";
+import Library, {libraryLoader} from "./components/Library";
 import Statistics from "./components/Statistics";
 import Rankings from "./components/Rankings";
 import {useState} from "react";
@@ -28,7 +28,7 @@ function App() {
                 <Route index element={<Home isUserLoggedIn={isUserLoggedIn} isUserAdmin={isUserAdmin}/>}
                        loader={allBooksLoader}/>
                 <Route path={"profile"} element={<Profile/>} loader={profileLoader}/>
-                <Route path={"library"} element={<Library/>}/>
+                <Route path={"library"} element={<Library isUserLoggedIn={isUserLoggedIn}/>} loader={libraryLoader}/>
                 <Route path={"statistics"} element={<Statistics/>}/>
                 <Route path={"rankings"} element={<Rankings/>}/>
             </Route>,
