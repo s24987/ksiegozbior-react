@@ -1,7 +1,7 @@
 import React, {use, useState} from "react";
 import {useLoaderData, useOutletContext} from "react-router-dom";
 
-const Profile = () => {
+const Profile = ({isUserLoggedIn, logOut}) => {
     const [setHeaderTitle] = useOutletContext();
     const userData = useLoaderData();
     setHeaderTitle("Profil użytkownika");
@@ -60,14 +60,39 @@ const Profile = () => {
 
             toggleEditView();
         } catch (err) {
-            console.error("Błąd podczas logowania:", err);
+            console.error("Błąd podczas aktualizacji użytkownika:", err);
+            setErrorSummary("Wystąpił błąd. Spróbuj ponownie później.");
+            showErrorSummary();
+        }
+    }
+
+    const hadleUserDelete = async () => {
+        try {
+            const response = await fetch("http://localhost:8080/users", {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include'
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                console.log(errorData);
+                setErrorSummary("Wystąpił błąd. Spróbuj ponownie później.");
+                showErrorSummary();
+            }
+
+            logOut();
+        } catch (err) {
+            console.error("Błąd podczas usuwania użytkownika:", err);
             setErrorSummary("Wystąpił błąd. Spróbuj ponownie później.");
             showErrorSummary();
         }
     }
 
     // if no error message, display user data
-    if (!userData.message) {
+    if (isUserLoggedIn && !userData.message) {
         return (
             <>
                 <h1>Witaj, {userData.username}!</h1>
@@ -127,7 +152,7 @@ const Profile = () => {
                     <button className="btn-next" onClick={handleUserUpdate}>Zapisz</button>
                 )}
                 {!isEditView && (
-                    <button className="delete btn-next">Usuń profil</button>
+                    <button className="delete btn-next" onClick={hadleUserDelete}>Usuń profil</button>
                 )}
             </>
         )

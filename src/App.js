@@ -27,7 +27,7 @@ function App() {
             <Route path="/" element={<MainLayout isUserLoggedIn={isUserLoggedIn} logIn={logIn} logOut={logOut}/>}>
                 <Route index element={<Home isUserLoggedIn={isUserLoggedIn} isUserAdmin={isUserAdmin}/>}
                        loader={allBooksLoader}/>
-                <Route path={"profile"} element={<Profile/>} loader={profileLoader}/>
+                <Route path={"profile"} element={<Profile isUserLoggedIn={isUserLoggedIn} logOut={logOut}/>} loader={profileLoader}/>
                 <Route path={"library"} element={<Library isUserLoggedIn={isUserLoggedIn}/>} loader={libraryLoader}/>
                 <Route path={"statistics"} element={<Statistics isUserLoggedIn={isUserLoggedIn}/>} loader={statisticsLoader}/>
                 <Route path={"rankings"} element={<RankingsLayout isUserLoggedIn={isUserLoggedIn}/>} loader={rankingsLoader}/>
