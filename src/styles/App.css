@@ -177,6 +177,19 @@ button.btn-next {
     margin: 5px 0;
 }
 
+
+#error_summary {
+    margin: 10px 0 0 0;
+    width: 20em;
+    display: none;
+    color: darkred;
+    font-size: small;
+}
+
+#error_summary.error-visible {
+    display: block;
+}
+
 @media print {
     * {
         font-family: Times, serif;
