@@ -78,7 +78,7 @@ footer p {
 }
 
 #page_body .middle-section {
-    margin: 15px 0;
+    margin: 0 0 15px 0;
 }
 
 #page_body section h2 {
@@ -109,11 +109,15 @@ table {
     border-collapse: collapse;
 }
 
-ol {
+ol.roman {
     list-style-type: upper-roman;
     list-style-position: inside;
 }
 
+ol.decimal {
+    list-style-type: decimal;
+    list-style-position: inside;
+}
 
 #search_box {
     display: flex;
@@ -121,6 +125,7 @@ ol {
     border: 2px solid darkturquoise;
     border-radius: 35px;
     padding: 5px 15px;
+    margin-bottom: 15px;
 }
 
 #input_search {

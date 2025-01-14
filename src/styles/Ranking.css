@@ -1,0 +1,14 @@
+.ranking-box ol {
+    border-left: darkturquoise 3px solid;
+}
+
+.ranking-box.middle {
+    border-bottom: darkturquoise 1px dashed;
+    border-collapse: collapse;
+}
+
+.ranking-box .title {
+    font-weight: bold;
+    color: darkturquoise;
+    margin: 0 0 15px 0;
+}

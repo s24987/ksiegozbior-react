@@ -6,7 +6,7 @@ import Profile, {profileLoader} from "./components/Profile";
 import MainLayout from "./components/MainLayout";
 import Library, {libraryLoader} from "./components/Library";
 import Statistics from "./components/Statistics";
-import Rankings from "./components/Rankings";
+import RankingsLayout, {rankingsLoader} from "./components/RankingsLayout";
 import {useState} from "react";
 
 
@@ -30,7 +30,7 @@ function App() {
                 <Route path={"profile"} element={<Profile/>} loader={profileLoader}/>
                 <Route path={"library"} element={<Library isUserLoggedIn={isUserLoggedIn}/>} loader={libraryLoader}/>
                 <Route path={"statistics"} element={<Statistics/>}/>
-                <Route path={"rankings"} element={<Rankings/>}/>
+                <Route path={"rankings"} element={<RankingsLayout isUserLoggedIn={isUserLoggedIn}/>} loader={rankingsLoader}/>
             </Route>,
         ])
     );
