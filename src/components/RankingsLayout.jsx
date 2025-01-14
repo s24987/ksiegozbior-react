@@ -30,12 +30,12 @@ const RankingsLayout = ({isUserLoggedIn}) => {
 
     const handleRankingEdit = (rankingData) => {
         setRankingToEdit(rankingData);
-        toggleView();
+        setIsEditView(true);
     };
 
     const handleRankingSave = async () => {
         try {
-            const response = await fetch("http://localhost:8080/rankings", {
+            const response = await fetch("http://localhost:8080/rankings" + (rankingToEdit.id ? `/${rankingToEdit.id}` : ""), {
                 method: rankingToEdit.id ? 'PUT' : 'POST',
                 headers: {
                     'Content-Type': 'application/json',
