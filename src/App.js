@@ -5,7 +5,7 @@ import Home, {allBooksLoader} from "./components/Home";
 import Profile, {profileLoader} from "./components/Profile";
 import MainLayout from "./components/MainLayout";
 import Library, {libraryLoader} from "./components/Library";
-import Statistics from "./components/Statistics";
+import Statistics, {statisticsLoader} from "./components/Statistics";
 import RankingsLayout, {rankingsLoader} from "./components/RankingsLayout";
 import {useState} from "react";
 
@@ -29,7 +29,7 @@ function App() {
                        loader={allBooksLoader}/>
                 <Route path={"profile"} element={<Profile/>} loader={profileLoader}/>
                 <Route path={"library"} element={<Library isUserLoggedIn={isUserLoggedIn}/>} loader={libraryLoader}/>
-                <Route path={"statistics"} element={<Statistics/>}/>
+                <Route path={"statistics"} element={<Statistics isUserLoggedIn={isUserLoggedIn}/>} loader={statisticsLoader}/>
                 <Route path={"rankings"} element={<RankingsLayout isUserLoggedIn={isUserLoggedIn}/>} loader={rankingsLoader}/>
             </Route>,
         ])
