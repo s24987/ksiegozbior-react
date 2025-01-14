@@ -58,8 +58,27 @@ const RankingsLayout = ({isUserLoggedIn}) => {
         }
     }
 
-    const handleRankingDelete = (rankingData) => {
-        //todo
+    const handleRankingDelete = async (rankingData) => {
+        try {
+            const response = await fetch(`http://localhost:8080/rankings/${rankingData.id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include'
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                //setError(errorData.message || "Wystąpił błąd");
+                // todo: handle errors
+                return;
+            }
+
+            await revalidator.revalidate();
+        } catch (err) {
+            console.log(err);
+        }
     };
 
     // if error message
