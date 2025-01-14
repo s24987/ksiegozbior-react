@@ -35,9 +35,26 @@ function App() {
         ])
     );
 
+    checkIfUserLoggedIn(logIn);
+
     return (
         <RouterProvider router={router}/>
     );
+}
+
+async function checkIfUserLoggedIn(logIn) {
+    const res = await fetch('http://localhost:8080/users', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+    });
+
+    if (res.ok) {
+        logIn();
+    }
+    else console.log(res);
 }
 
 export default App;
