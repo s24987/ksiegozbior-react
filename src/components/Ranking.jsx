@@ -4,7 +4,7 @@ const Ranking = ({rankingData}) => {
             <p className="title">{rankingData.rankingTitle}</p>
             <ol className={rankingData.numerationType}>
                 {rankingData.books && rankingData.books.length > 0 && rankingData.books.map(book => (
-                    <li>{book.bookTitle}, {book.author}</li>
+                    <li key={book.bookId}>{book.bookTitle}, {book.author}</li>
                 ))}
             </ol>
         </>
