@@ -173,6 +173,10 @@ button.btn-next {
     margin-left: 5px;
 }
 
+.dynamic-edit-input {
+    margin: 5px 0;
+}
+
 @media print {
     * {
         font-family: Times, serif;
