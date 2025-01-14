@@ -1,17 +1,65 @@
-import {useLoaderData, useOutletContext} from "react-router-dom";
+import {useLoaderData, useOutletContext, useRevalidator} from "react-router-dom";
 import {useState} from "react";
 import RankingForm from "./RankingForm";
 import RankingsList from "./RankingsList";
 import '../styles/Ranking.css';
 
 const RankingsLayout = ({isUserLoggedIn}) => {
+    const revalidator = useRevalidator();
     const [setHeaderTitle] = useOutletContext();
-    const rankings = useLoaderData();
+    let rankings = useLoaderData();
     setHeaderTitle("Twoje rankingi");
     const [isEditView, setIsEditView] = useState(false);
+    const [rankingToEdit, setRankingToEdit] = useState(null);
 
     const toggleView = () => {
         setIsEditView((prev) => !prev);
+        if (!isEditView)
+            setRankingToEdit(null);
+    };
+
+    const handleRankingCreate = () => {
+        const newRanking = {
+            rankingTitle: '',
+            numerationType: 'decimal',
+            books: []
+        }
+        setRankingToEdit(newRanking);
+        setIsEditView(true);
+    };
+
+    const handleRankingEdit = (rankingData) => {
+        setRankingToEdit(rankingData);
+        toggleView();
+    };
+
+    const handleRankingSave = async () => {
+        try {
+            const response = await fetch("http://localhost:8080/rankings", {
+                method: rankingToEdit.id ? 'PUT' : 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include',
+                body: JSON.stringify(rankingToEdit),
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                //setError(errorData.message || "Wystąpił błąd");
+                // todo: handle errors
+                return;
+            }
+
+            toggleView();
+            await revalidator.revalidate();
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    const handleRankingDelete = (rankingData) => {
+        //todo
     };
 
     // if error message
@@ -22,20 +70,29 @@ const RankingsLayout = ({isUserLoggedIn}) => {
     }
 
     if (!isEditView)
-    return(
-        <>
-            <RankingsList rankings={rankings}/>
-            <button onClick={toggleView}>Nowy ranking</button>
-        </>
-    );
+        return (
+            <>
+                <RankingsList rankings={rankings} onRankingEdit={handleRankingEdit}
+                              onRankingDelete={handleRankingDelete}/>
+                <button onClick={handleRankingCreate}>Nowy ranking</button>
+            </>
+        );
     else
-        return(
-            <RankingForm closeForm={toggleView}/>
+        return (
+            <>
+                <RankingForm rankingData={rankingToEdit} setRankingData={setRankingToEdit}/>
+                <form>
+                    <button>Dodaj pozycję</button>
+                    <button className="btn-next" onClick={handleRankingSave}>Zapisz ranking</button>
+                </form>
+
+                <button className="btn-next" onClick={toggleView}>Anuluj</button>
+            </>
         )
 };
 
 export const rankingsLoader = async () => {
-    return  fetch('http://localhost:8080/rankings', {
+    return fetch('http://localhost:8080/rankings', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',

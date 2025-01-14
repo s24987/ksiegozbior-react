@@ -12,3 +12,30 @@
     color: darkturquoise;
     margin: 0 0 15px 0;
 }
+
+.ranking-box table {
+    border-collapse: collapse;
+    margin: 0 0 15px 0;
+}
+
+.ranking-box th, td {
+    border: 2px solid darkturquoise;
+    padding: 5px;
+}
+
+.ranking-box td > button {
+    margin: 0;
+}
+
+.ranking-box td.number {
+    text-align: center;
+}
+
+.ranking-box .title {
+    font-size: large;
+    width: 50%;
+}
+
+.ranking-box-label {
+    display: inline;
+}
