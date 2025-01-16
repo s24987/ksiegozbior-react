@@ -98,15 +98,8 @@ const RankingsLayout = ({isUserLoggedIn}) => {
         );
     else
         return (
-            <>
-                <RankingForm rankingData={rankingToEdit} setRankingData={setRankingToEdit}/>
-                <form>
-                    <button>Dodaj pozycję</button>
-                    <button className="btn-next" onClick={handleRankingSave}>Zapisz ranking</button>
-                </form>
-
-                <button className="btn-next" onClick={toggleView}>Anuluj</button>
-            </>
+            <RankingForm rankingData={rankingToEdit} setRankingData={setRankingToEdit} toggleEditView={toggleView}
+                         handleRankingSave={handleRankingSave}/>
         )
 };
 

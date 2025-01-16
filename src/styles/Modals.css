@@ -1,0 +1,28 @@
+.modal-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.modal-choice-list {
+    overflow-y: auto;
+    flex-grow: 1;
+}
+
+.modal-btn-section {
+    display: flex;
+    justify-content: space-around;
+}
+
+.modal-btn-section > button {
+    flex-grow: 1;
+    margin: 15px;
+}
+
+.modal-choice-list > section {
+    padding: 10px;
+}
+
+.modal-choice-list > section > input[type="radio"] {
+    margin: auto 5px;
+}
