@@ -41,7 +41,10 @@ const RankingForm = ({rankingData, setRankingData, handleRankingSave, toggleEdit
         setIsModalOpen(false);
     }
 
-    const handleNewRankingRecordCreate = () => {}
+    const handleNewRankingRecordCreate = (bookId) => {
+        // todo
+        console.log(bookId);
+    }
 
     return (
         <section className="ranking-box">
@@ -86,7 +89,7 @@ const RankingForm = ({rankingData, setRankingData, handleRankingSave, toggleEdit
             <button className="btn-next" onClick={handleRankingSave}>Zapisz ranking</button>
             <button className="btn-next" onClick={toggleEditView}>Anuluj</button>
             <ReactModal isOpen={isModalOpen}>
-                <BookChoiceList books={books} closeModal={closeModal}/>
+                <BookChoiceList books={books} closeModal={closeModal} handleSubmit={handleNewRankingRecordCreate}/>
             </ReactModal>
         </section>
     );

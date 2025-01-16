@@ -19,6 +19,18 @@
     margin: 15px;
 }
 
+.modal-btn-section > input[type='submit'] {
+    flex-grow: 1;
+    margin: 15px;
+    font-size: small;
+    font-weight: bolder;
+    padding: 10px 20px;
+    background-color: darkturquoise;
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
+
 .modal-choice-list > section {
     padding: 10px;
 }
