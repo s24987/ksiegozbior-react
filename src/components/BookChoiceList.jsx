@@ -5,7 +5,6 @@ const BookChoiceList = ({books, closeModal, handleSubmit}) => {
     const onFormSubmit = (e) => {
         e.preventDefault();
         const formData = new FormData(e.target);
-        closeModal();
         handleSubmit(formData.get("book_choice"));
     }
 

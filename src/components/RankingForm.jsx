@@ -1,17 +1,12 @@
 import ReactModal from "react-modal";
 import {useState} from "react";
 import BookChoiceList from "./BookChoiceList";
+import {useRevalidator} from "react-router-dom";
 
 const RankingForm = ({rankingData, setRankingData, handleRankingSave, toggleEditView}) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [books, setBooks] = useState([]);
-
-
-    const modalStyles = {
-        overlay: {
-            position: 'relative'
-        },
-    };
+    const revalidator = useRevalidator();
 
     const handleTitleChange = (e) => {
         setRankingData(prev => ({
@@ -41,9 +36,35 @@ const RankingForm = ({rankingData, setRankingData, handleRankingSave, toggleEdit
         setIsModalOpen(false);
     }
 
-    const handleNewRankingRecordCreate = (bookId) => {
-        // todo
-        console.log(bookId);
+    const handleNewRankingRecordCreate = async (bookId) => {
+        const rankingRecord = {
+            bookId: bookId,
+            recordPosition: 1
+        };
+
+        try {
+            const response = await fetch(`http://localhost:8080/rankings/records/${rankingData.id}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include',
+                body: JSON.stringify(rankingRecord),
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                //setError(errorData.message || "Wystąpił błąd");
+                // todo: handle errors
+                console.log(errorData);
+                return;
+            }
+
+            setIsModalOpen(false);
+            await revalidator.revalidate();
+        } catch (err) {
+            console.log(err);
+        }
     }
 
     return (
