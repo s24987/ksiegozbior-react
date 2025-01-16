@@ -7,7 +7,7 @@ return (
         <img src="https://s.lubimyczytac.pl/upload/books/4923000/4923601/1122658-352x500.jpg"/>
         <div>
             <h2>
-                <a href="/">{book.title}</a>
+                <a href={`/books/${book.id}`}>{book.title}</a>
             </h2>
             <h4>{book.author}</h4>
             <p>Format: {bookFormat}</p>
