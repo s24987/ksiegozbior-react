@@ -1,18 +1,22 @@
 import BookChoice from "./BookChoice";
 import '../styles/Modals.css'
+import {useState} from "react";
 
 const BookChoiceList = ({books, closeModal, handleSubmit}) => {
+    const [bookChoice, setBookChoice] = useState(null);
     const onFormSubmit = (e) => {
         e.preventDefault();
-        const formData = new FormData(e.target);
-        handleSubmit(formData.get("book_choice"));
+        if (bookChoice != null)
+            handleSubmit(bookChoice);
+        else
+            alert('Wybierz książkę');
     }
 
     return (
         <form className="modal-content" onSubmit={onFormSubmit}>
             <div id="search_results" className="modal-choice-list">
                 {books.map(book => (
-                    <BookChoice book={book}/>
+                    <BookChoice book={book} setBookChoice={setBookChoice}/>
                 ))}
             </div>
             <div className="modal-btn-section">

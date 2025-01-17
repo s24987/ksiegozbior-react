@@ -1,12 +1,19 @@
 import ReactModal from "react-modal";
 import {useState} from "react";
 import BookChoiceList from "./BookChoiceList";
-import {useRevalidator} from "react-router-dom";
 
-const RankingForm = ({rankingData, setRankingData, handleRankingSave, toggleEditView}) => {
+const RankingForm = ({
+                         rankingData,
+                         setRankingData,
+                         addedRankingRecords,
+                         setAddedRankingRecords,
+                         deletedRankingRecords,
+                         setDeletedRankingRecords,
+                         handleRankingSave,
+                         toggleEditView
+                     }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [books, setBooks] = useState([]);
-    const revalidator = useRevalidator();
 
     const handleTitleChange = (e) => {
         setRankingData(prev => ({
@@ -36,35 +43,36 @@ const RankingForm = ({rankingData, setRankingData, handleRankingSave, toggleEdit
         setIsModalOpen(false);
     }
 
-    const handleNewRankingRecordCreate = async (bookId) => {
-        const rankingRecord = {
-            bookId: bookId,
-            recordPosition: 1
-        };
+    const handleRankingRecordSubmit = async (book) => {
+        console.log(book);
+        if (book == null) {
+            alert('Książka nie została wybrana');
+        }
 
-        try {
-            const response = await fetch(`http://localhost:8080/rankings/records/${rankingData.id}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                credentials: 'include',
-                body: JSON.stringify(rankingRecord),
-            });
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                //setError(errorData.message || "Wystąpił błąd");
-                // todo: handle errors
-                console.log(errorData);
+        // search ranking books to see if it's a new record
+        for (const record of rankingData.books) {
+            if (record.bookId === book.id) {
+                alert('This book is already in the ranking!');
                 return;
             }
-
-            setIsModalOpen(false);
-            await revalidator.revalidate();
-        } catch (err) {
-            console.log(err);
         }
+
+        // if new, add to list
+        const rankingRecord = {
+            bookId: book.id,
+            recordPosition: 1,
+            bookTitle: book.title,
+            format: book.format,
+            author: book.author,
+            genre: book.genre
+        };
+
+        setAddedRankingRecords(prev => ([...prev, rankingRecord]));
+        rankingData.books.push(rankingRecord);
+        rankingData.books.sort((b1, b2) => b1.recordPosition - b2.recordPosition);
+        setRankingData(rankingData);
+
+        setIsModalOpen(false);
     }
 
     return (
@@ -110,7 +118,7 @@ const RankingForm = ({rankingData, setRankingData, handleRankingSave, toggleEdit
             <button className="btn-next" onClick={handleRankingSave}>Zapisz ranking</button>
             <button className="btn-next" onClick={toggleEditView}>Anuluj</button>
             <ReactModal isOpen={isModalOpen}>
-                <BookChoiceList books={books} closeModal={closeModal} handleSubmit={handleNewRankingRecordCreate}/>
+                <BookChoiceList books={books} closeModal={closeModal} handleSubmit={handleRankingRecordSubmit}/>
             </ReactModal>
         </section>
     );

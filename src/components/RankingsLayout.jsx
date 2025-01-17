@@ -11,11 +11,15 @@ const RankingsLayout = ({isUserLoggedIn}) => {
     setHeaderTitle("Twoje rankingi");
     const [isEditView, setIsEditView] = useState(false);
     const [rankingToEdit, setRankingToEdit] = useState(null);
+    const [addedRankingRecords, setAddedRankingRecords] = useState([]);
+    const [deletedRankingRecords, setDeletedRankingRecords] = useState([]);
 
     const toggleView = () => {
         setIsEditView((prev) => !prev);
-        if (!isEditView)
+        if (!isEditView) {
             setRankingToEdit(null);
+            revalidator.revalidate();
+        }
     };
 
     const handleRankingCreate = () => {
@@ -44,6 +48,7 @@ const RankingsLayout = ({isUserLoggedIn}) => {
                 body: JSON.stringify(rankingToEdit),
             });
 
+            // todo: save ranking records
             if (!response.ok) {
                 const errorData = await response.json();
                 //setError(errorData.message || "Wystąpił błąd");
@@ -98,8 +103,11 @@ const RankingsLayout = ({isUserLoggedIn}) => {
         );
     else
         return (
-            <RankingForm rankingData={rankingToEdit} setRankingData={setRankingToEdit} toggleEditView={toggleView}
-                         handleRankingSave={handleRankingSave}/>
+            <RankingForm rankingData={rankingToEdit} setRankingData={setRankingToEdit}
+                         addedRankingRecords={addedRankingRecords} setAddedRankingRecords={setAddedRankingRecords}
+                         deletedRankingRecords={deletedRankingRecords}
+                         setDeletedRankingRecords={setDeletedRankingRecords}
+                         toggleEditView={toggleView} handleRankingSave={handleRankingSave}/>
         )
 };
 

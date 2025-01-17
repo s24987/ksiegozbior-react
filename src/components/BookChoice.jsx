@@ -1,10 +1,12 @@
-const BookChoice = ({book}) => {
+const BookChoice = ({book, setBookChoice}) => {
     let bookFormat = book.format;
     if (book.format === "paper")
         bookFormat = "papier";
     return (
         <section className="middle-section">
-            <input type="radio" name="book_choice" value={book.id}/>
+            <input type="radio" name="book_choice" onClick={() => {
+                setBookChoice(book)
+            }}/>
             <img src="https://s.lubimyczytac.pl/upload/books/4923000/4923601/1122658-352x500.jpg"/>
             <div>
                 <h2>
