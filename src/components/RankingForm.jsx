@@ -1,6 +1,9 @@
 import ReactModal from "react-modal";
 import {useState} from "react";
 import BookChoiceList from "./BookChoiceList";
+import {useForm} from "react-hook-form";
+import {yupResolver} from "@hookform/resolvers/yup";
+import * as yup from "yup";
 
 const RankingForm = ({
                          rankingData,
@@ -16,6 +19,32 @@ const RankingForm = ({
                      }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [books, setBooks] = useState([]);
+
+    const validationSchema = yup.object().shape({
+        rankingTitle: yup.string()
+            .min(3, "Tytuł musi mieć co najmniej 3 znaki")
+            .max(255, "Tytuł nie może mieć więcej niż 255 znaków")
+            .required("Tytuł jest wymagany"),
+        books: yup.array().of(
+            yup.object().shape({
+                recordPosition: yup.number()
+                    .positive("Pozycja musi być liczbą większą od zera")
+                    .required("Pozycja jest wymagana"),
+            })
+        ),
+    });
+
+    const {
+        register,
+        handleSubmit,
+        formState: {errors},
+    } = useForm({
+        resolver: yupResolver(validationSchema),
+        defaultValues: {
+            rankingTitle: rankingData?.rankingTitle || "",
+            books: rankingData?.books || [],
+        },
+    });
 
     const handleTitleChange = (e) => {
         setRankingData(prev => ({
@@ -115,59 +144,73 @@ const RankingForm = ({
         setUpdatedRankingRecords(prev => [...prev, record]);
     };
 
+    const onSubmit = (e) => {
+        handleRankingSave();
+    }
+
     return (
         <section className="ranking-box">
-            <input type="text" className="title" placeholder="Tytuł rankingu"
-                   value={rankingData && rankingData.rankingTitle} onChange={handleTitleChange}/>
-            <br/>
-            {rankingData && rankingData.books.length > 0 && (
-                <table>
-                    <tbody>
-                    <tr>
-                        <th>Pozycja</th>
-                        <th>Tytuł</th>
-                        <th>Format</th>
-                        <th>Autor</th>
-                        <th>Gatunek</th>
-                        <th></th>
-                    </tr>
-                    {rankingData.books.map(book => (
+            <form onSubmit={handleSubmit(onSubmit)}>
+                <input type="text" className="title" placeholder="Tytuł rankingu" {...register("rankingTitle")}
+                       value={rankingData && rankingData.rankingTitle} onChange={handleTitleChange}/>
+                {errors.rankingTitle &&
+                    <p className="error-message title-error-message">{errors.rankingTitle.message}</p>}
+
+                {rankingData && rankingData.books.length > 0 && (
+                    <table>
+                        <tbody>
                         <tr>
-                            <td className="number">
-                                <input type="number" value={book.recordPosition} className="transparent-input"
-                                       onChange={(event) => {
-                                           handleRecordPositionChange(event, book)
-                                       }}/>
-                            </td>
-                            <td>{book.bookTitle}</td>
-                            <td>{book.format === 'paper' ? 'papier' : book.format}</td>
-                            <td>{book.author}</td>
-                            <td>{book.genre}</td>
-                            <td>
-                                <button className="delete" onClick={() => {
-                                    handleRankingRecordDelete(book)
-                                }}>Usuń
-                                </button>
-                            </td>
+                            <th>Pozycja</th>
+                            <th>Tytuł</th>
+                            <th>Format</th>
+                            <th>Autor</th>
+                            <th>Gatunek</th>
+                            <th></th>
                         </tr>
-                    ))}
-                    </tbody>
-                </table>
-            )}
+                        {rankingData.books.map(book => (
+                            <tr>
+                                <td className="number">
+                                    <input type="number" value={book.recordPosition} className="transparent-input"
+                                           {...register(`books.${book.bookId}.recordPosition`)}
+                                           onChange={(event) => {
+                                               handleRecordPositionChange(event, book)
+                                           }}/>
+                                </td>
+                                <td>{book.bookTitle}</td>
+                                <td>{book.format === 'paper' ? 'papier' : book.format}</td>
+                                <td>{book.author}</td>
+                                <td>{book.genre}</td>
+                                <td>
+                                    <button className="delete" onClick={() => {
+                                        handleRankingRecordDelete(book)
+                                    }}>Usuń
+                                    </button>
+                                </td>
+                            </tr>
+                        ))}
+                        </tbody>
+                    </table>
+                )}
 
-            <label htmlFor="numeration_type" className="ranking-box-label">Typ numeracji </label>
-            <select id="numeration_type" name="numeration_type">
-                <option value="decimal">Liczby arabskie</option>
-                <option value="roman">Liczby rzymskie</option>
-            </select>
-            <br/>
+                {errors.books?.some((bookError) => bookError?.recordPosition) && (
+                    <p className="error-message">
+                        Jedna lub więcej pozycji ma nieprawidłową wartość. Pozycja powinna być liczbą większą od zera.
+                    </p>
+                )}
+                <label htmlFor="numeration_type" className="ranking-box-label">Typ numeracji </label>
+                <select id="numeration_type" name="numeration_type">
+                    <option value="decimal">Liczby arabskie</option>
+                    <option value="roman">Liczby rzymskie</option>
+                </select>
+                <br/>
 
-            <button onClick={openModal}>Dodaj pozycję</button>
-            <button className="btn-next" onClick={handleRankingSave}>Zapisz ranking</button>
-            <button className="btn-next" onClick={onCancel}>Anuluj</button>
-            <ReactModal isOpen={isModalOpen}>
-                <BookChoiceList books={books} closeModal={closeModal} handleSubmit={handleRankingRecordSubmit}/>
-            </ReactModal>
+                <button onClick={openModal}>Dodaj pozycję</button>
+                <button type="submit" className="btn-next">Zapisz ranking</button>
+                <button className="btn-next" onClick={onCancel}>Anuluj</button>
+                <ReactModal isOpen={isModalOpen}>
+                    <BookChoiceList books={books} closeModal={closeModal} handleSubmit={handleRankingRecordSubmit}/>
+                </ReactModal>
+            </form>
         </section>
     );
 };
