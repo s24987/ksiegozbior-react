@@ -87,6 +87,16 @@ const RankingsLayout = ({isUserLoggedIn}) => {
         } catch (error) {
             console.error('Błąd podczas zapisywania:', error);
         }
+
+        // delete records
+        try {
+            const results = await Promise.all(
+                deletedRankingRecords.map(r => deleteRankingRecord(rankingId, r))
+            );
+            console.log('Błędy podczas usuwania:', results);
+        } catch (error) {
+            console.error('Błąd podczas usuwania:', error);
+        }
     }
 
     const saveNewRankingRecord = async (rankingId, recordToSave) => {
@@ -98,6 +108,27 @@ const RankingsLayout = ({isUserLoggedIn}) => {
                 },
                 credentials: 'include',
                 body: JSON.stringify(recordToSave),
+            });
+
+            if (!response.ok) {
+                const errorMessage = await response.json().then(json => (json.message || (parseErrors(json.errors))));
+                return errorMessage;
+            }
+            return null;
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const deleteRankingRecord = async (rankingId, recordToDelete) => {
+        try {
+            const response = await fetch(`http://localhost:8080/rankings/records/${rankingId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include',
+                body: JSON.stringify(recordToDelete),
             });
 
             if (!response.ok) {
