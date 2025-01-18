@@ -53,7 +53,6 @@
 
 .login-layout #error_summary {
     width: 20em;
-    display: none;
     color: darkred;
     font-size: small;
 }
