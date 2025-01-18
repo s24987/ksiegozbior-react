@@ -19,6 +19,8 @@ const RankingsLayout = ({isUserLoggedIn}) => {
         setIsEditView((prev) => !prev);
         if (!isEditView) {
             setRankingToEdit(null);
+            setAddedRankingRecords([]);
+            setDeletedRankingRecords([]);
             revalidator.revalidate();
         }
     };
