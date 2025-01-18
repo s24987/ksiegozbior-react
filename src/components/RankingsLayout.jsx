@@ -3,6 +3,7 @@ import {useState} from "react";
 import RankingForm from "./RankingForm";
 import RankingsList from "./RankingsList";
 import '../styles/Ranking.css';
+import {parseErrors} from "../utils";
 
 const RankingsLayout = ({isUserLoggedIn}) => {
     const revalidator = useRevalidator();
@@ -39,7 +40,7 @@ const RankingsLayout = ({isUserLoggedIn}) => {
 
     const handleRankingSave = async () => {
         try {
-            const response = await fetch("http://localhost:8080/rankings" + (rankingToEdit.id ? `/${rankingToEdit.id}` : ""), {
+            const rankingResponse = await fetch("http://localhost:8080/rankings" + (rankingToEdit.id ? `/${rankingToEdit.id}` : ""), {
                 method: rankingToEdit.id ? 'PUT' : 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -48,18 +49,64 @@ const RankingsLayout = ({isUserLoggedIn}) => {
                 body: JSON.stringify(rankingToEdit),
             });
 
-            // todo: save ranking records
-            if (!response.ok) {
-                const errorData = await response.json();
+
+            if (!rankingResponse.ok) {
+                const errorData = await rankingResponse.json();
                 //setError(errorData.message || "Wystąpił błąd");
                 // todo: handle errors
                 return;
             }
 
+            let rankingId = rankingToEdit.id;
+            if (!rankingToEdit.id) {
+                const newRankingId = await rankingResponse.json().then(json => json.id);
+                rankingId = newRankingId;
+                setRankingToEdit(prev => ({
+                    ...prev,
+                    id: newRankingId
+                }));
+            }
+
+            // save ranking records
+            await saveRankingRecords(rankingId);
+
             toggleView();
             await revalidator.revalidate();
         } catch (err) {
             console.log(err);
+        }
+    }
+
+    const saveRankingRecords = async (rankingId) => {
+        // save new records
+        try {
+            const results = await Promise.all(
+                addedRankingRecords.map(r => saveNewRankingRecord(rankingId, r))
+            );
+            console.log('Błędy podczas zapisywania:', results);
+        } catch (error) {
+            console.error('Błąd podczas zapisywania:', error);
+        }
+    }
+
+    const saveNewRankingRecord = async (rankingId, recordToSave) => {
+        try {
+            const response = await fetch(`http://localhost:8080/rankings/records/${rankingId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include',
+                body: JSON.stringify(recordToSave),
+            });
+
+            if (!response.ok) {
+                const errorMessage = await response.json().then(json => (json.message || (parseErrors(json.errors))));
+                return errorMessage;
+            }
+            return null;
+        } catch (error) {
+            console.log(error);
         }
     }
 
