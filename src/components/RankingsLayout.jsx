@@ -3,7 +3,7 @@ import {useState} from "react";
 import RankingForm from "./RankingForm";
 import RankingsList from "./RankingsList";
 import '../styles/Ranking.css';
-import {parseErrors} from "../utils";
+import {combineMessages, parseErrors} from "../utils";
 
 const RankingsLayout = ({isUserLoggedIn}) => {
     const revalidator = useRevalidator();
@@ -15,6 +15,7 @@ const RankingsLayout = ({isUserLoggedIn}) => {
     const [addedRankingRecords, setAddedRankingRecords] = useState([]);
     const [deletedRankingRecords, setDeletedRankingRecords] = useState([]);
     const [updatedRankingRecords, setUpdatedRankingRecords] = useState([]);
+    const [error, setError] = useState(null);
 
     const toggleView = () => {
         setIsEditView((prev) => !prev);
@@ -25,6 +26,7 @@ const RankingsLayout = ({isUserLoggedIn}) => {
             setUpdatedRankingRecords([]);
             revalidator.revalidate();
         }
+        setError(null);
     };
 
     const handleRankingCreate = () => {
@@ -56,8 +58,7 @@ const RankingsLayout = ({isUserLoggedIn}) => {
 
             if (!rankingResponse.ok) {
                 const errorData = await rankingResponse.json();
-                //setError(errorData.message || "Wystąpił błąd");
-                // todo: handle errors
+                setError(errorData.message || parseErrors(errorData.errors) || 'Wystąpił błąd podczas zapisywania');
                 return;
             }
 
@@ -87,8 +88,13 @@ const RankingsLayout = ({isUserLoggedIn}) => {
             const results = await Promise.all(
                 addedRankingRecords.map(r => saveNewRankingRecord(rankingId, r))
             );
-            console.log('Błędy podczas zapisywania:', results);
+            const combinedErrorMessage = combineMessages(results);
+            if (combinedErrorMessage) {
+                setError(combinedErrorMessage);
+                console.log('Błędy podczas zapisywania: ', results);
+            }
         } catch (error) {
+            setError('Wystąpił błąd podczas dodawania rekordu');
             console.error('Błąd podczas zapisywania:', error);
         }
 
@@ -97,9 +103,14 @@ const RankingsLayout = ({isUserLoggedIn}) => {
             const results = await Promise.all(
                 deletedRankingRecords.map(r => deleteRankingRecord(rankingId, r))
             );
-            console.log('Błędy podczas usuwania:', results);
+            const combinedErrorMessage = combineMessages(results);
+            if (combinedErrorMessage) {
+                setError(combinedErrorMessage);
+                console.log('Błędy podczas usuwania: ', results);
+            }
         } catch (error) {
-            console.error('Błąd podczas usuwania:', error);
+            setError('Wystąpił błąd podczas usuwania rekordu');
+            console.error('Błąd podczas usuwania: ', error);
         }
 
         // update records
@@ -107,8 +118,13 @@ const RankingsLayout = ({isUserLoggedIn}) => {
             const results = await Promise.all(
                 updatedRankingRecords.map(r => updateRankingRecord(rankingId, r))
             );
-            console.log('Błędy podczas usuwania:', results);
+            const combinedErrorMessage = combineMessages(results);
+            if (combinedErrorMessage) {
+                setError(combinedErrorMessage);
+                console.log('Błędy podczas zapisywania: ', results);
+            }
         } catch (error) {
+            setError('Wystąpił błąd podczas aktualizacji rekordu');
             console.error('Błąd podczas usuwania:', error);
         }
     }
@@ -188,8 +204,7 @@ const RankingsLayout = ({isUserLoggedIn}) => {
 
             if (!response.ok) {
                 const errorData = await response.json();
-                //setError(errorData.message || "Wystąpił błąd");
-                // todo: handle errors
+                setError(errorData.message || parseErrors(errorData.errors) || 'Wystąpił błąd podczas usuwania rankingu');
                 return;
             }
 
@@ -200,7 +215,7 @@ const RankingsLayout = ({isUserLoggedIn}) => {
     };
 
     // if error message
-    if (!isUserLoggedIn || typeof rankings.message !== 'undefined') {
+    if (!isUserLoggedIn || (rankings.message)) {
         return (
             <h2>Nie jesteś zalogowany.</h2>
         );
@@ -212,15 +227,22 @@ const RankingsLayout = ({isUserLoggedIn}) => {
                 <RankingsList rankings={rankings} onRankingEdit={handleRankingEdit}
                               onRankingDelete={handleRankingDelete}/>
                 <button onClick={handleRankingCreate}>Nowy ranking</button>
+                <p id="error_summary">{error}</p>
             </>
         );
     else
         return (
-            <RankingForm rankingData={rankingToEdit} setRankingData={setRankingToEdit}
-                         addedRankingRecords={addedRankingRecords} setAddedRankingRecords={setAddedRankingRecords}
-                         deletedRankingRecords={deletedRankingRecords} setDeletedRankingRecords={setDeletedRankingRecords}
-                         updatedRankingRecords={updatedRankingRecords} setUpdatedRankingRecords={setUpdatedRankingRecords}
-                         toggleEditView={toggleView} handleRankingSave={handleRankingSave}/>
+            <>
+                <RankingForm rankingData={rankingToEdit} setRankingData={setRankingToEdit}
+                             addedRankingRecords={addedRankingRecords} setAddedRankingRecords={setAddedRankingRecords}
+                             deletedRankingRecords={deletedRankingRecords}
+                             setDeletedRankingRecords={setDeletedRankingRecords}
+                             updatedRankingRecords={updatedRankingRecords}
+                             setUpdatedRankingRecords={setUpdatedRankingRecords}
+                             toggleEditView={toggleView} handleRankingSave={handleRankingSave}/>
+                <p id="error_summary">{error}</p>
+            </>
+
         )
 };
 

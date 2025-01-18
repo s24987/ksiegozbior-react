@@ -18,9 +18,7 @@ const parseErrors = (errors) => {
 };
 
 const combineMessages = (messages) => {
-    // todo
-    console.log('Messages combined: ' + messages);
-    return 'Combined messages';
+    return messages.join('\n');
 }
 
 module.exports.parseErrors = parseErrors;
