@@ -14,6 +14,7 @@ const RankingsLayout = ({isUserLoggedIn}) => {
     const [rankingToEdit, setRankingToEdit] = useState(null);
     const [addedRankingRecords, setAddedRankingRecords] = useState([]);
     const [deletedRankingRecords, setDeletedRankingRecords] = useState([]);
+    const [updatedRankingRecords, setUpdatedRankingRecords] = useState([]);
 
     const toggleView = () => {
         setIsEditView((prev) => !prev);
@@ -21,6 +22,7 @@ const RankingsLayout = ({isUserLoggedIn}) => {
             setRankingToEdit(null);
             setAddedRankingRecords([]);
             setDeletedRankingRecords([]);
+            setUpdatedRankingRecords([]);
             revalidator.revalidate();
         }
     };
@@ -99,6 +101,16 @@ const RankingsLayout = ({isUserLoggedIn}) => {
         } catch (error) {
             console.error('Błąd podczas usuwania:', error);
         }
+
+        // update records
+        try {
+            const results = await Promise.all(
+                updatedRankingRecords.map(r => updateRankingRecord(rankingId, r))
+            );
+            console.log('Błędy podczas usuwania:', results);
+        } catch (error) {
+            console.error('Błąd podczas usuwania:', error);
+        }
     }
 
     const saveNewRankingRecord = async (rankingId, recordToSave) => {
@@ -131,6 +143,27 @@ const RankingsLayout = ({isUserLoggedIn}) => {
                 },
                 credentials: 'include',
                 body: JSON.stringify(recordToDelete),
+            });
+
+            if (!response.ok) {
+                const errorMessage = await response.json().then(json => (json.message || (parseErrors(json.errors))));
+                return errorMessage;
+            }
+            return null;
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const updateRankingRecord = async (rankingId, recordUpdate) => {
+        try {
+            const response = await fetch(`http://localhost:8080/rankings/records/${rankingId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include',
+                body: JSON.stringify(recordUpdate),
             });
 
             if (!response.ok) {
@@ -185,8 +218,8 @@ const RankingsLayout = ({isUserLoggedIn}) => {
         return (
             <RankingForm rankingData={rankingToEdit} setRankingData={setRankingToEdit}
                          addedRankingRecords={addedRankingRecords} setAddedRankingRecords={setAddedRankingRecords}
-                         deletedRankingRecords={deletedRankingRecords}
-                         setDeletedRankingRecords={setDeletedRankingRecords}
+                         deletedRankingRecords={deletedRankingRecords} setDeletedRankingRecords={setDeletedRankingRecords}
+                         updatedRankingRecords={updatedRankingRecords} setUpdatedRankingRecords={setUpdatedRankingRecords}
                          toggleEditView={toggleView} handleRankingSave={handleRankingSave}/>
         )
 };

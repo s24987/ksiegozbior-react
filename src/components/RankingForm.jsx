@@ -9,6 +9,8 @@ const RankingForm = ({
                          setAddedRankingRecords,
                          deletedRankingRecords,
                          setDeletedRankingRecords,
+                         updatedRankingRecords,
+                         setUpdatedRankingRecords,
                          handleRankingSave,
                          toggleEditView
                      }) => {
@@ -101,14 +103,16 @@ const RankingForm = ({
         setRankingData(rankingData);
     }
 
-    const handleRecordPositionChange = (event, bookId) => {
+    const handleRecordPositionChange = async (event, record) => {
         const newPosition = parseInt(event.target.value, 10);
-        setRankingData(prev => ({
+
+        await setRankingData(prev => ({
             ...prev,
             books: prev.books.map(book =>
-                book.id === bookId ? {...book, recordPosition: newPosition} : book
+                book.bookId === record.bookId ? {...book, recordPosition: newPosition} : book
             )
         }));
+        setUpdatedRankingRecords(prev => [...prev, record]);
     };
 
     return (
@@ -131,7 +135,9 @@ const RankingForm = ({
                         <tr>
                             <td className="number">
                                 <input type="number" value={book.recordPosition} className="transparent-input"
-                                onChange={(event) => handleRecordPositionChange(event, book.id)}/>
+                                       onChange={(event) => {
+                                           handleRecordPositionChange(event, book)
+                                       }}/>
                             </td>
                             <td>{book.bookTitle}</td>
                             <td>{book.format === 'paper' ? 'papier' : book.format}</td>
