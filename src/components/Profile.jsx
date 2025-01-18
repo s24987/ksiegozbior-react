@@ -127,7 +127,7 @@ const Profile = ({isUserLoggedIn, logOut}) => {
                         </>
                     )}
 
-                    {isEditView && error(
+                    {isEditView && error && (
                         <p id="error_summary">{error}</p>
                     )}
                 </section>
