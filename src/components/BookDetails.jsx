@@ -5,6 +5,7 @@ import '../styles/BookDetails.css';
 const BookDetails = () => {
     const {bookId} = useParams();
     const [book, setBook] = useState(null);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
         const fetchBookDetails = async () => {
@@ -14,8 +15,8 @@ const BookDetails = () => {
                     const data = await response.json();
                     setBook(data);
                 } else {
-                    // todo
-                    console.log("Błąd podczas pobierania szczegółów książki");
+                    setError("Błąd podczas pobierania szczegółów książki");
+                    console.log("Błąd podczas pobierania szczegółów książki: " + response);
                 }
             } catch (error) {
                 console.error("Błąd:", error);
@@ -25,7 +26,8 @@ const BookDetails = () => {
         fetchBookDetails();
     }, [bookId]);
 
-    if (!book) return <p>Ładowanie szczegółów książki...</p>;
+    if (!book && !error) return (<p>Ładowanie szczegółów książki...</p>);
+    else if (error) return (<p id="error_summary">{error}</p>)
 
     return (
         <div className="two-columns">
