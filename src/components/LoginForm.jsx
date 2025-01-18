@@ -1,4 +1,5 @@
 import {useState} from "react";
+import {parseErrors} from "../utils";
 
 const LoginForm = ({closeModal, logIn}) => {
     const [username, setUsername] = useState("");
@@ -15,12 +16,13 @@ const LoginForm = ({closeModal, logIn}) => {
                     'Content-Type': 'application/json',
                 },
                 credentials: 'include',
-                body: JSON.stringify({ username, password }),
+                body: JSON.stringify({username, password}),
             });
 
             if (!response.ok) {
                 const errorData = await response.json();
-                setError(errorData.message || "Błąd logowania");
+                const errorMessage = errorData.message || parseErrors(errorData.errors) || "Błąd logowania";
+                await setError(errorMessage);
                 return;
             }
 
@@ -40,11 +42,14 @@ const LoginForm = ({closeModal, logIn}) => {
                 <input type="text" id="input_username" name="username" onChange={(e) => setUsername(e.target.value)}/>
                 <label htmlFor="input_password">Utwórz nowe hasło:</label>
                 <input type="password" id="input_password" name="password" onChange={(e) => setPassword(e.target.value)}/>
-                <p id="error_summary" defaultValue={error}/>
+                {error !== '' &&
+                    <p id="error_summary" className={error !== '' ? 'error-visible' : ''}>{error}</p>
+                }
                 <input
                     type="submit"
                     name="submit"
                     defaultValue="Zaloguj się"
+                    value="Zaloguj się"
                 />
             </form>
         </section>
