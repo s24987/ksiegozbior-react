@@ -24,8 +24,6 @@ const LoginForm = ({closeModal, logIn}) => {
 
 
     const onSubmit = async (e) => {
-        e.preventDefault();
-
         try {
             const response = await fetch("http://localhost:8080/login", {
                 method: 'POST',
