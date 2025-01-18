@@ -34,7 +34,7 @@ const RankingsLayout = ({isUserLoggedIn}) => {
     };
 
     const handleRankingEdit = (rankingData) => {
-        setRankingToEdit(rankingData);
+        setRankingToEdit(structuredClone(rankingData));
         setIsEditView(true);
     };
 
