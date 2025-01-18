@@ -1,5 +1,6 @@
 import React, {use, useState} from "react";
 import {useLoaderData, useOutletContext} from "react-router-dom";
+import {parseErrors} from "../utils";
 
 const Profile = ({isUserLoggedIn, logOut}) => {
     const [setHeaderTitle] = useOutletContext();
@@ -11,23 +12,13 @@ const Profile = ({isUserLoggedIn, logOut}) => {
     const [fullName, setFullName] = useState(userData.fullName);
     const [isEditView, setIsEditView] = useState(false);
     const [password, setPassword] = useState("");
-    const [errorSummary, setErrorSummary] = useState("");
-    const [isErrorVisible, setIsErrorVisible] = useState(false);
+    const [error, setError] = useState(null);
 
     const toggleEditView = () => {
         setIsEditView(prevState => !prevState);
         if (!isEditView) {
-            hideErrorSummary();
-            setErrorSummary("");
+            setError(null);
         }
-    }
-
-    const showErrorSummary = () => {
-        setIsErrorVisible(true);
-    }
-
-    const hideErrorSummary = () => {
-        setIsErrorVisible(false);
     }
 
     const handleUserUpdate = async (e) => {
@@ -53,16 +44,14 @@ const Profile = ({isUserLoggedIn, logOut}) => {
 
             if (!response.ok) {
                 const errorData = await response.json();
-                setErrorSummary(errorData.message || "Błąd aktualizacji");
-                showErrorSummary();
+                setError(errorData.message || parseErrors(errorData.errors) || 'Wystąpił błąd podczas aktualizacji');
                 return;
             }
 
             toggleEditView();
         } catch (err) {
-            console.error("Błąd podczas aktualizacji użytkownika:", err);
-            setErrorSummary("Wystąpił błąd. Spróbuj ponownie później.");
-            showErrorSummary();
+            console.error("Błąd podczas aktualizacji użytkownika: ", err);
+            setError("Wystąpił błąd. Spróbuj ponownie później.");
         }
     }
 
@@ -78,16 +67,13 @@ const Profile = ({isUserLoggedIn, logOut}) => {
 
             if (!response.ok) {
                 const errorData = await response.json();
-                console.log(errorData);
-                setErrorSummary("Wystąpił błąd. Spróbuj ponownie później.");
-                showErrorSummary();
+                setError(errorData.message || parseErrors(errorData.errors) || 'Wystąpił błąd. Spróbuj ponownie później.');
             }
 
             logOut();
         } catch (err) {
             console.error("Błąd podczas usuwania użytkownika:", err);
-            setErrorSummary("Wystąpił błąd. Spróbuj ponownie później.");
-            showErrorSummary();
+            setError("Wystąpił błąd. Spróbuj ponownie później.");
         }
     }
 
@@ -141,8 +127,8 @@ const Profile = ({isUserLoggedIn, logOut}) => {
                         </>
                     )}
 
-                    {isEditView && (
-                        <p id="error_summary" className={isErrorVisible? "error-visible" : ""}>{errorSummary}</p>
+                    {isEditView && error(
+                        <p id="error_summary">{error}</p>
                     )}
                 </section>
                 <button onClick={toggleEditView}>
@@ -158,7 +144,15 @@ const Profile = ({isUserLoggedIn, logOut}) => {
         )
     } else
         return (
-            <h2>Nie jesteś zalogowany.</h2>
+            <>
+                {error && (
+                    <p id="error_summary">{error}</p>
+                )}
+                {!error && (
+                    <h2>Nie jesteś zalogowany.</h2>
+                )}
+            </>
+
         )
 };
 
