@@ -1,9 +1,20 @@
+const fieldMap = {
+    rankingTitle: 'ranking title',
+    numerationType: 'numeration type',
+    bookId: 'book ID',
+    rankingId: 'ranking ID',
+    recordPosition: 'record position'
+}
+
 const parseErrors = (errors) => {
+    const messageArray = [];
     for (const error of errors) {
-        console.log(error);
+        const fieldName = fieldMap[error.path] || error.path;
+        const message = error.msg;
+        messageArray.push(`${fieldName}: ${message}`);
     }
-    // todo
-    return 'Error';
+
+    return messageArray.join('\n');
 };
 
 const combineMessages = (messages) => {
