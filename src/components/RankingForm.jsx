@@ -101,6 +101,16 @@ const RankingForm = ({
         setRankingData(rankingData);
     }
 
+    const handleRecordPositionChange = (event, bookId) => {
+        const newPosition = parseInt(event.target.value, 10);
+        setRankingData(prev => ({
+            ...prev,
+            books: prev.books.map(book =>
+                book.id === bookId ? {...book, recordPosition: newPosition} : book
+            )
+        }));
+    };
+
     return (
         <section className="ranking-box">
             <input type="text" className="title" placeholder="Tytuł rankingu"
@@ -119,13 +129,19 @@ const RankingForm = ({
                     </tr>
                     {rankingData.books.map(book => (
                         <tr>
-                            <td className="number">{book.recordPosition}</td>
+                            <td className="number">
+                                <input type="number" value={book.recordPosition} className="transparent-input"
+                                onChange={(event) => handleRecordPositionChange(event, book.id)}/>
+                            </td>
                             <td>{book.bookTitle}</td>
                             <td>{book.format === 'paper' ? 'papier' : book.format}</td>
                             <td>{book.author}</td>
                             <td>{book.genre}</td>
                             <td>
-                                <button className="delete" onClick={() => {handleRankingRecordDelete(book)}}>Usuń</button>
+                                <button className="delete" onClick={() => {
+                                    handleRankingRecordDelete(book)
+                                }}>Usuń
+                                </button>
                             </td>
                         </tr>
                     ))}

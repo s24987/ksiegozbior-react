@@ -27,6 +27,22 @@
     margin: 0;
 }
 
+.transparent-input {
+    background-color: transparent;
+    border: 1px solid transparent;
+    outline: none;
+    font-size: 16px;
+    padding: 2px;
+    max-width: 40px;
+    width: auto;
+    text-align: center;
+    min-width: 2ch;
+}
+
+.transparent-input:focus {
+    border-color: #000;
+}
+
 .ranking-box td.number {
     text-align: center;
 }
