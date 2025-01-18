@@ -43,6 +43,12 @@ const RankingForm = ({
         setIsModalOpen(false);
     }
 
+    const onCancel = async () => {
+        setAddedRankingRecords([]);
+        setDeletedRankingRecords([]);
+        toggleEditView();
+    }
+
     const handleRankingRecordSubmit = async (book) => {
         console.log(book);
         if (book == null) {
@@ -116,7 +122,7 @@ const RankingForm = ({
 
             <button onClick={openModal}>Dodaj pozycję</button>
             <button className="btn-next" onClick={handleRankingSave}>Zapisz ranking</button>
-            <button className="btn-next" onClick={toggleEditView}>Anuluj</button>
+            <button className="btn-next" onClick={onCancel}>Anuluj</button>
             <ReactModal isOpen={isModalOpen}>
                 <BookChoiceList books={books} closeModal={closeModal} handleSubmit={handleRankingRecordSubmit}/>
             </ReactModal>
