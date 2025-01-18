@@ -1,0 +1,19 @@
+.two-columns {
+    display: flex;
+}
+
+.two-columns > section {
+    flex: 1;
+    margin-left: 15px;
+    height: fit-content;
+}
+
+.book-details h1 {
+    margin: 0 0 15px 0;
+}
+
+.book-details h3 {
+    margin: 0 0 15px 0;
+    font-weight: normal;
+    color: dimgrey;
+}

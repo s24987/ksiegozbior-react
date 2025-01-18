@@ -8,6 +8,7 @@ import Library, {libraryLoader} from "./components/Library";
 import Statistics, {statisticsLoader} from "./components/Statistics";
 import RankingsLayout, {rankingsLoader} from "./components/RankingsLayout";
 import {useState} from "react";
+import BookDetails from "./components/BookDetails";
 
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
                 <Route path={"library"} element={<Library isUserLoggedIn={isUserLoggedIn}/>} loader={libraryLoader}/>
                 <Route path={"statistics"} element={<Statistics isUserLoggedIn={isUserLoggedIn}/>} loader={statisticsLoader}/>
                 <Route path={"rankings"} element={<RankingsLayout isUserLoggedIn={isUserLoggedIn}/>} loader={rankingsLoader}/>
+                <Route path="books/:bookId" element={<BookDetails />} />
             </Route>,
         ])
     );
