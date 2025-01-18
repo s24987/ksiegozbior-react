@@ -43,7 +43,7 @@ const LoginForm = ({closeModal, logIn}) => {
                 <label htmlFor="input_password">Utwórz nowe hasło:</label>
                 <input type="password" id="input_password" name="password" onChange={(e) => setPassword(e.target.value)}/>
                 {error !== '' &&
-                    <p id="error_summary" className={error !== '' ? 'error-visible' : ''}>{error}</p>
+                    <p id="error_summary">{error}</p>
                 }
                 <input
                     type="submit"
