@@ -81,6 +81,26 @@ const RankingForm = ({
         setIsModalOpen(false);
     }
 
+    const handleRankingRecordDelete = async (deletedRecord) => {
+        let isRecordNew = false;
+        // search added books
+        for (const record of addedRankingRecords) {
+            if (record.bookId === deletedRecord.bookId) {
+                const updatedList = addedRankingRecords.filter(r => r.bookId !== deletedRecord.bookId);
+                setAddedRankingRecords(updatedList);
+                isRecordNew = true;
+            }
+        }
+
+        if (!isRecordNew) {
+            setDeletedRankingRecords(prev => ([...prev, deletedRecord]));
+        }
+
+        const updatedList = rankingData.books.filter(r => r.bookId !== deletedRecord.bookId);
+        rankingData.books = updatedList;
+        setRankingData(rankingData);
+    }
+
     return (
         <section className="ranking-box">
             <input type="text" className="title" placeholder="Tytuł rankingu"
@@ -105,7 +125,7 @@ const RankingForm = ({
                             <td>{book.author}</td>
                             <td>{book.genre}</td>
                             <td>
-                                <button className="delete">Usuń</button>
+                                <button className="delete" onClick={() => {handleRankingRecordDelete(book)}}>Usuń</button>
                             </td>
                         </tr>
                     ))}
