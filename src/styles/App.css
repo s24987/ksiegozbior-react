@@ -183,6 +183,11 @@ button.btn-next {
     font-size: small;
 }
 
+.error-message {
+    color: darkred;
+    font-size: small;
+}
+
 
 @media print {
     * {
