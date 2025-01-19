@@ -21,16 +21,16 @@ const AccountLayout = ({closeModal, logIn}) => {
                 {isLoginView ? (
                     <div>
                         <p>Nie masz konta?{" "}</p>
-                        <button onClick={toggleView}>Zarejestruj się</button>
+                        <button type="button" onClick={toggleView}>Zarejestruj się</button>
                     </div>
                 ) : (
                     <div>
                         <p>Masz już konto?{" "}</p>
-                        <button onClick={toggleView}>Zaloguj się</button>
+                        <button type="button" onClick={toggleView}>Zaloguj się</button>
                     </div>
                 )}
             </div>
-            <button className="delete" onClick={closeModal}>
+            <button type="button" className="delete" onClick={closeModal}>
                 Zamknij
             </button>
         </div>

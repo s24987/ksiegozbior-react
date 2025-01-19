@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import {useLoaderData, useOutletContext, useRevalidator} from "react-router-dom";
 import {parseErrors} from "../utils";
 import {useForm} from "react-hook-form";
@@ -8,7 +8,6 @@ import * as yup from "yup";
 const Profile = ({isUserLoggedIn, logOut}) => {
     const [setHeaderTitle] = useOutletContext();
     const userData = useLoaderData();
-    setHeaderTitle("Profil użytkownika");
     const revalidator = useRevalidator();
 
     const [email, setEmail] = useState(userData.email);
@@ -17,6 +16,8 @@ const Profile = ({isUserLoggedIn, logOut}) => {
     const [isEditView, setIsEditView] = useState(false);
     const [password, setPassword] = useState("");
     const [error, setError] = useState(null);
+
+    setHeaderTitle("Profil użytkownika");
 
     const validationSchema = yup.object().shape({
         fullName: yup.string()
@@ -39,17 +40,14 @@ const Profile = ({isUserLoggedIn, logOut}) => {
     const {
         register,
         handleSubmit,
-        formState: { errors },
+        formState: {errors},
     } = useForm({
         resolver: yupResolver(validationSchema),
     });
 
     const toggleEditView = () => {
-        setIsEditView(prevState => !prevState);
-        if (!isEditView) {
-            setError(null);
-            revalidator.revalidate();
-        }
+        setIsEditView((prevState) => !prevState);
+        setError(null);
     }
 
     const handleUserUpdate = async () => {
@@ -77,15 +75,16 @@ const Profile = ({isUserLoggedIn, logOut}) => {
                 return;
             }
 
-            toggleEditView();
+            await toggleEditView();
+            await revalidator.revalidate();
         } catch (err) {
             console.error("Błąd podczas aktualizacji użytkownika: ", err);
             setError("Wystąpił błąd. Spróbuj ponownie później.");
         }
     }
 
-    const onSubmit = (e) => {
-        handleUserUpdate();
+    const onSubmit = async (e) => {
+        await handleUserUpdate();
     }
 
     const handleUserDelete = async () => {
@@ -116,70 +115,71 @@ const Profile = ({isUserLoggedIn, logOut}) => {
             <>
                 <h1>Witaj, {userData.username}!</h1>
                 <form onSubmit={handleSubmit(onSubmit)}>
-                <section>
-                    <b>Imię i nazwisko:</b> {userData.fullName}
-                    <br/>
+                    <section>
+                        <b>Imię i nazwisko:</b> {userData.fullName}
+                        <br/>
+                        {isEditView && (
+                            <>
+                                <input type="text" id="input_full_name" name="full_name" className="dynamic-edit-input"
+                                       value={fullName} {...register("fullName")}
+                                       onChange={(e) => {
+                                           setFullName(e.target.value)
+                                       }}/>
+                                <br/>
+                                {errors.fullName && <p className="error-message">{errors.fullName.message}</p>}
+                            </>
+                        )}
+
+                        <b>Adres e-mail:</b> {userData.email}
+                        <br/>
+                        {isEditView && (
+                            <>
+                                <input type="email" id="input_email" name="email" className="dynamic-edit-input"
+                                       value={email} {...register("email")} onChange={(e) => {
+                                    setEmail(e.target.value)
+                                }}/>
+                                <br/>
+                                {errors.email && <p className="error-message">{errors.email.message}</p>}
+                            </>
+                        )}
+
+                        <b>Data urodzenia:</b> {new Date(userData.birthdate).toISOString().split('T')[0]}
+                        <br/>
+                        {isEditView && (
+                            <>
+                                <input type="date" id="input_birthday" name="birthday" className="dynamic-edit-input"
+                                       value={birthdate} {...register("birthdate")} onChange={(e) => {
+                                    setBirthdate(e.target.value)
+                                }}/>
+                                <br/>
+                                {errors.birthdate && <p className="error-message">{errors.birthdate.message}</p>}
+                            </>
+                        )}
+
+                        {isEditView && (
+                            <>
+                                <label htmlFor="input_password">Nowe hasło:</label>
+                                <input type="password" id="input_password" name="password" {...register("password")}
+                                       onChange={(e) => setPassword(e.target.value)}/>
+                                {errors.password && <p className="error-message">{errors.password.message}</p>}
+                            </>
+                        )}
+
+                        {isEditView && error && (
+                            <p id="error_summary">{error}</p>
+                        )}
+                    </section>
+
+                    <button type="button" onClick={toggleEditView}>
+                        {isEditView ? "Anuluj" : "Edytuj profil"}
+                    </button>
                     {isEditView && (
-                        <>
-                            <input type="text" id="input_full_name" name="full_name" className="dynamic-edit-input"
-                                   value={fullName} {...register("fullName")}
-                                   onChange={(e) => {
-                                setFullName(e.target.value)
-                            }}/>
-                            <br/>
-                            {errors.fullName && <p className="error-message">{errors.fullName.message}</p>}
-                        </>
+                        <button type="submit" className="btn-next">Zapisz</button>
                     )}
-
-                    <b>Adres e-mail:</b> {userData.email}
-                    <br/>
-                    {isEditView && (
-                        <>
-                            <input type="email" id="input_email" name="email" className="dynamic-edit-input"
-                                   value={email} {...register("email")} onChange={(e) => {
-                                setEmail(e.target.value)
-                            }}/>
-                            <br/>
-                            {errors.email && <p className="error-message">{errors.email.message}</p>}
-                        </>
+                    {!isEditView && (
+                        <button type="button" className="delete btn-next" onClick={handleUserDelete}>Usuń
+                            profil</button>
                     )}
-
-                    <b>Data urodzenia:</b> {new Date(userData.birthdate).toISOString().split('T')[0]}
-                    <br/>
-                    {isEditView && (
-                        <>
-                            <input type="date" id="input_birthday" name="birthday" className="dynamic-edit-input"
-                                   value={birthdate} {...register("birthdate")} onChange={(e) => {
-                                setBirthdate(e.target.value)
-                            }}/>
-                            <br/>
-                            {errors.birthdate && <p className="error-message">{errors.birthdate.message}</p>}
-                        </>
-                    )}
-
-                    {isEditView && (
-                        <>
-                            <label htmlFor="input_password">Nowe hasło:</label>
-                            <input type="password" id="input_password" name="password" {...register("password")}
-                                   onChange={(e) => setPassword(e.target.value)}/>
-                            {errors.password && <p className="error-message">{errors.password.message}</p>}
-                        </>
-                    )}
-
-                    {isEditView && error && (
-                        <p id="error_summary">{error}</p>
-                    )}
-                </section>
-
-                <button onClick={toggleEditView}>
-                    {isEditView ? "Anuluj" : "Edytuj profil"}
-                </button>
-                {isEditView && (
-                    <button type="submit" className="btn-next">Zapisz</button>
-                )}
-                {!isEditView && (
-                    <button className="delete btn-next" onClick={handleUserDelete}>Usuń profil</button>
-                )}
                 </form>
             </>
         )
